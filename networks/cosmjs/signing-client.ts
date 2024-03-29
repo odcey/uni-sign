@@ -1,6 +1,36 @@
+import { AminoSigner } from "@uni-sign/cosmos/amino";
+import {
+  Any,
+  AuthInfo,
+  IBinaryWriter,
+  Secp256k1PubKey,
+  SignDoc,
+  SignerInfo,
+  SignMode,
+  TxBody,
+  TxRaw,
+} from "@uni-sign/cosmos/types";
+import {
+  constructAuthInfo,
+  constructSignerInfo,
+  constructTxBody,
+  toAminoMsgs,
+  toEncoder,
+  toFee,
+  toMessages,
+} from "@uni-sign/cosmos/utils";
+import { TxRpc } from "@uni-sign/cosmos-msgs/types";
 import { Auth, HttpEndpoint, Price, StdFee, StdSignDoc } from "@uni-sign/types";
 import { fromBase64, Key } from "@uni-sign/utils";
 
+import {
+  Block,
+  BlockResponse,
+  IndexedTx,
+  SearchTxQuery,
+  SearchTxResponse,
+  TxResponse,
+} from "./types/query";
 import {
   DeliverTxResponse,
   EncodeObject,
@@ -13,37 +43,7 @@ import {
   OfflineDirectSigner,
   OfflineSigner,
 } from "./types/wallet";
-import { defaultAuth, BroadcastTxError, sleep, TimeoutError } from "./utils";
-import {
-  AuthInfo,
-  Secp256k1PubKey,
-  SignDoc,
-  SignMode,
-  SignerInfo,
-  TxBody,
-  TxRaw,
-  IBinaryWriter,
-  Any,
-} from "@uni-sign/cosmos/types";
-import {
-  constructAuthInfo,
-  constructSignerInfo,
-  constructTxBody,
-  toAminoMsgs,
-  toEncoder,
-  toFee,
-  toMessages,
-} from "@uni-sign/cosmos/utils";
-import { AminoSigner } from "@uni-sign/cosmos/amino";
-import {
-  SearchTxQuery,
-  SearchTxResponse,
-  IndexedTx,
-  Block,
-  BlockResponse,
-  TxResponse,
-} from "./types/query";
-import { TxRpc } from "@uni-sign/cosmos-msgs/types";
+import { BroadcastTxError, defaultAuth, sleep, TimeoutError } from "./utils";
 
 /**
  * implement the same methods as what in `cosmjs` signingClient
@@ -96,7 +96,7 @@ export class SigningClient {
     signer: OfflineSigner,
     options: SignerOptions = {}
   ): SigningClient {
-    const aminoSigner = new AminoSigner(defaultAuth, [], []);
+    const aminoSigner = new AminoSigner(defaultAuth, [], [], endpoint);
     const signingClient = new SigningClient(aminoSigner, signer, options);
     signingClient.setEndpoint(endpoint);
     return signingClient;

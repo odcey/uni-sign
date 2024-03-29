@@ -1,12 +1,13 @@
 import { AminoSigner } from "@uni-sign/cosmos/amino";
-import { StargateMsgs } from "@uni-sign/cosmos-msgs/stargate";
-import { CosmWasmMsgs } from "@uni-sign/cosmos-msgs/cosmwasm";
-import { TxImpl } from "@uni-sign/cosmos-msgs/stargate-cosmwasm.tx";
-import { SigningClient } from "./signing-client";
-import { OfflineSigner } from "./types/wallet";
-import { SignerOptions } from "./types/signing-client";
-import { HttpEndpoint } from "@uni-sign/types";
 import { toConverter, toEncoder } from "@uni-sign/cosmos/utils";
+import { CosmWasmMsgs } from "@uni-sign/cosmos-msgs/cosmwasm";
+import { StargateMsgs } from "@uni-sign/cosmos-msgs/stargate";
+import { TxImpl } from "@uni-sign/cosmos-msgs/stargate-cosmwasm.tx";
+import { HttpEndpoint } from "@uni-sign/types";
+
+import { SigningClient } from "./signing-client";
+import { SignerOptions } from "./types/signing-client";
+import { OfflineSigner } from "./types/wallet";
 import { defaultAuth } from "./utils";
 
 export class CosmWasmSigningClient extends SigningClient {
@@ -33,7 +34,7 @@ export class CosmWasmSigningClient extends SigningClient {
     signer: OfflineSigner,
     options: SignerOptions = {}
   ): CosmWasmSigningClient {
-    const aminoSigner = new AminoSigner(defaultAuth, [], []);
+    const aminoSigner = new AminoSigner(defaultAuth, [], [], endpoint);
     const signingClient = new CosmWasmSigningClient(
       aminoSigner,
       signer,
